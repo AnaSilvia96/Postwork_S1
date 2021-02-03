@@ -1,0 +1,39 @@
+library(dplyr)
+library(tidyr)
+
+dat.fra <- read.csv("SP1.csv")
+goals <- dat.fra[,c("FTHG","FTAG")]
+
+head(goals)
+
+
+th <- as.vector(table(dat.fra$FTHG)) #Host team
+ta <- as.vector(table(dat.fra$FTAG)) #Away team
+
+#Sabiendo el resultado de la función, defino la cantidad de goles posibles
+x<-data.frame(Goals = 0:6, Freq = th)
+y<-data.frame(Goals = 0:5, Freq = ta)
+
+#Número total de partidos
+matches <-dim(dat.fra)[1]
+
+#Probabilidad de que el HT anote x cantidad de goles
+for (i in 1:7) {
+  x$Prob[i]<- round(x$Freq[i]/matches,4)
+}
+x;y
+
+#Probabilidades conjuntas
+#Freq relativas como data frame
+tha<-as.data.frame(table(goals))
+
+#Probabilidad de que el AT anote x cantidad de goles
+for (i in 1:42){
+  tha$Prob[i]<-round(tha$Freq[i]/matches,4)
+}
+
+tha
+
+write.csv(x,file="x.csv")
+write.csv(y,file="y.csv")
+write.csv(tha,file="tha.csv")
